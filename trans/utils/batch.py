@@ -36,12 +36,8 @@ class RecipeContestant:
     def count_pages(self) -> list[int]:
         page_counts = []
         for trans in self.translations:
-            if settings.USE_CPDF:
-                res = subprocess.run(['cpdf', '-pages', trans.get_final_pdf_path()], check=True, stdout=subprocess.PIPE)
-                num_pages = int(res.stdout)
-            else:
-                with Pdf.open(trans.get_final_pdf_path()) as pdf:
-                    num_pages = len(pdf.pages)
+            with Pdf.open(trans.get_final_pdf_path()) as pdf:
+                num_pages = len(pdf.pages)
             page_counts.append(num_pages)
         return page_counts
 
@@ -193,15 +189,11 @@ class BatchRecipe:
         output_path = Path(settings.MEDIA_ROOT) / 'batch' / str(self.contest.slug)
         output_path.mkdir(parents=True, exist_ok=True)
         output_pdf_path = output_path / f'{name_base}.pdf'
-        if settings.USE_CPDF:
-            cmd = ['cpdf'] + parts + ['-o', str(output_pdf_path)]
-            subprocess.run(cmd, check=True)
-        else:
-            with Pdf.new() as output_pdf:
-                for part in parts:
-                    with Pdf.open(part) as part_pdf:
-                        output_pdf.pages.extend(part_pdf.pages)
-                output_pdf.save(output_pdf_path)
+        with Pdf.new() as output_pdf:
+            for part in parts:
+                with Pdf.open(part) as part_pdf:
+                    output_pdf.pages.extend(part_pdf.pages)
+            output_pdf.save(output_pdf_path)
 
         return str(output_pdf_path)
 

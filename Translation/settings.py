@@ -230,9 +230,6 @@ PRINT_BATCH_WHOLE_TEAM = False
 # Enable if you use duplex printing.
 PRINT_BATCH_DUPLEX = True
 
-# Use cpdf instead of the new pikepdf code to transform PDFs
-USE_CPDF = False
-
 # Add Markdown source as an embedded file stream in the generated PDFs (experimental)
 EMBED_MARKDOWN = True
 

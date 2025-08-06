@@ -59,12 +59,9 @@ def build_pdf(translation: Translation, task_type: str) -> str:
         loop = asyncio.get_event_loop()
         browser_pdf_path = loop.run_until_complete(_convert_html_to_pdf(html, temp_dir_path))
         transformed_pdf_path = temp_dir_path / 'transformed.pdf'
-        if settings.USE_CPDF:
-            _add_page_numbers_to_pdf(browser_pdf_path, transformed_pdf_path, task.name)
-        else:
-            _add_footer_to_pdf(browser_pdf_path, transformed_pdf_path, temp_dir_path,
-                               '{task} ({page} of {num_pages})',
-                               task=task.name, align_right=False)
+        _add_footer_to_pdf(browser_pdf_path, transformed_pdf_path, temp_dir_path,
+                           '{task} ({page} of {num_pages})',
+                           task=task.name, align_right=False)
         if settings.EMBED_MARKDOWN:
             embedding_pdf_path = temp_dir_path / 'embedding.pdf'
             _add_markdown_to_pdf(transformed_pdf_path, embedding_pdf_path, markdown)
@@ -83,10 +80,7 @@ def build_printed_draft_pdf(contest_slug: str, pdf_file_path: str, info: str) ->
     draft_dir_path = Path(f'{settings.MEDIA_ROOT}/draft/{contest_slug}')
     draft_dir_path.mkdir(parents=True, exist_ok=True)
     output_pdf_path = draft_dir_path / (str(uuid4()) + '.pdf')
-    if settings.USE_CPDF:
-        _add_info_line_to_pdf(Path(pdf_file_path), output_pdf_path, info)
-    else:
-        _add_footer_to_pdf(Path(pdf_file_path), output_pdf_path, _temp_dir_path(), info, align_right=True)
+    _add_footer_to_pdf(Path(pdf_file_path), output_pdf_path, _temp_dir_path(), info, align_right=True)
     return str(output_pdf_path)
 
 
@@ -165,20 +159,6 @@ async def _convert_html_to_pdf(html: str, temp_dir_path: Path) -> Path:
         logger.error(e)
 
     return pdf_file
-
-
-def _add_page_numbers_to_pdf(src_pdf_path: Path, dst_pdf_path: Path, task_name: str) -> None:
-    color =  '-color "0.4 0.4 0.4" '
-    cmd = ('cpdf -add-text "{0} (%Page of %EndPage)   " -font "Arial" ' + color + \
-          '-font-size 10 -bottomright .62in {1} -o {2}').format(task_name, src_pdf_path, dst_pdf_path)
-    os.system(cmd)
-
-
-def _add_info_line_to_pdf(src_pdf_path: Path, dst_pdf_path: Path, info: str) -> None:
-    color =  '-color "0.4 0.4 0.4" '
-    cmd = 'cpdf -add-text "   {}" -font "Arial" -font-size 10 -bottomleft .62in {} -o {} {}'.format(
-        info, src_pdf_path, dst_pdf_path, color)
-    os.system(cmd)
 
 
 def _add_footer_to_pdf(src_pdf_path: Path, dst_pdf_path: Path, temp_dir_path: Path, footer: str, align_right: bool, **kwargs):
