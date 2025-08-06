@@ -12,9 +12,6 @@ RUN apt update -qq && \
         libpangocairo-1.0-0 libatk1.0-0 libatk-bridge2.0-0 libgtk-3-0 libx11-xcb1 \
         tzdata
 
-COPY binaries/cpdf/cpdf /usr/local/bin/
-RUN chmod +x /usr/local/bin/cpdf
-
 RUN python3 -m venv --system-site-packages /opt/translate/venv
 
 COPY requirements.txt constraints.txt /opt/translate/
