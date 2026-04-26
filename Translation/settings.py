@@ -237,11 +237,12 @@ EMBED_MARKDOWN = True
 HOST_URL = os.environ.get('TRANS_URL', 'http://127.0.0.1:9000/')
 
 # If not in debug mode, we are behind a proxy and we trust it's X-Forwarded-For headers
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = not DEBUG
 XFF_TRUSTED_PROXY_DEPTH = 1
 XFF_STRICT = not DEBUG
-CSRF_TRUSTED_ORIGINS = [HOST_URL + '*']
+CSRF_TRUSTED_ORIGINS = ["https://trans.apio2026.ntnu.tw"]
 
 # Machine translation
 ENABLE_AUTO_TRANSLATE = 'autotranslate' in INSTALLED_APPS

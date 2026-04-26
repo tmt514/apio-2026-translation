@@ -19,7 +19,6 @@ pre, table th {
 }
 
 div.pdf {
-    background-color: white;
     border: 1px solid #333;
     box-shadow: 0 0 2px #333;
     width: 45em;
@@ -30,7 +29,7 @@ div.pdf {
 
 .header {
     font-family: Arial, sans-serif;
-    font-size: 14px;
+    font-size: 20px;
     letter-spacing: -.04em;
     font-weight: 400;
 }
@@ -38,7 +37,7 @@ div.pdf {
 .header .title {
     display: inline-block;
     float: left;
-    line-height: 1.25em;
+    line-height: 0.8em;
 }
 
 .header .title div:first-child {
@@ -66,17 +65,18 @@ div.pdf {
     display: inline-block;
     float: right;
     text-align: right;
-    margin-top: 14px; /* ioi-2019 */
-	font-weight: bold; /* ioi-2019 */
-    font-size: 12px;
+    margin-top: 0px; /* ioi-2019 */
+    font-weight: bold; /* ioi-2019 */
+    font-size: 1em;
+    line-height: 0.5em;
 }
 
 .header .meta div:first-child {
  /*   font-family: "Courier New", monospace; */ /* ioi-2019 */
  /*   font-weight: bold; */  /* ioi-2019 */
-    font-size: 18px;
+    font-size: 1.5em;
+    line-height: 1.5em;
     letter-spacing: -.03em;
-    line-height: 25px;
     margin: 0px;
 }
 
@@ -89,10 +89,10 @@ div.pdf {
 
 .pdf.markdown-body {
     color: black;
-    font-size: 14px;
 }
 
 .pdf.markdown-body code {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace; 
     color: black;
 }
 
@@ -105,7 +105,7 @@ div.pdf {
 
     body {
         margin: 0;
-        background-color: white;
+	background-color: white;
     }
 
     div.pdf {
@@ -115,6 +115,10 @@ div.pdf {
         box-shadow: none;
         width: 100%;
         min-height: 0;
+    }
+
+    .markdown-body * {
+	line-height: 32px;
     }
 
     .header .logo img {
